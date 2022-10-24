@@ -55,6 +55,7 @@ class Buscaminas():
         self.width = width
         self.height = height
         self.num_minas = num_minas
+        self.win=False
         self.lugar_seleccionable = width * height - num_minas
         self.juego_activo = True
         self.flags = np.zeros((self.width, self.height), dtype=bool)
@@ -223,7 +224,7 @@ class Buscaminas():
             None
     
     def agregar_quitar_bandera(self, casilla):
-        bombas = np.zeros((8,8), dtype = bool)
+        bombas = np.zeros((self.width, self.width), dtype = bool)
         for x1,y1 in self.casillas:
             if self.tablero[x1][y1].valor == -1:
                 bombas[x1][y1] = True        
@@ -238,15 +239,17 @@ class Buscaminas():
         if self.lugar_seleccionable == 0:
             self.juego_activo = False
             if np.all(self.flags == bombas):
-                print("¡Felicidades! Juego terminado")
-            else:
-                print("Perdiste, ¡Juego terminado!")
+                self.win=True
+                
+           
+                
+                
             self.pintar_todo()
         
     def transicion(self, casilla):
         self.transicion_bool = True
         x, y = casilla
-        bombas = np.zeros((8,8), dtype = bool)
+        bombas = np.zeros((self.width,self.width), dtype = bool)
         for x1,y1 in self.casillas:
             if self.tablero[x1][y1].valor == -1:
                 bombas[x1][y1] = True        
@@ -256,14 +259,11 @@ class Buscaminas():
             self.lugar_seleccionable -= 1
             if self.tablero[x][y].valor == -1:
                 self.juego_activo = False
-                print("Perdiste, ¡Juego terminado!")
+           
                 ax = self.pintar_todo()
             if self.lugar_seleccionable == 0:
-                self.juego_activo = False
-                if np.all(self.flags == bombas):
-                    print("¡Felicidades! Juego terminado")
-                else:
-                    print("Perdiste, ¡Juego terminado!")
+                self.win=True
+        
                 self.pintar_todo()
             if self.tablero[x][y].valor == 0:
                 for x1, y1 in adyacentes(casilla, self.width):
