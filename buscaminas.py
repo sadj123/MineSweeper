@@ -263,7 +263,7 @@ class Buscaminas():
                 ax = self.pintar_todo()
             if self.lugar_seleccionable == 0:
                 self.win=True
-        
+                self.juego_activo=False
                 self.pintar_todo()
             if self.tablero[x][y].valor == 0:
                 for x1, y1 in adyacentes(casilla, self.width):
